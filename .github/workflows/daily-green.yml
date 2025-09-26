@@ -1,0 +1,36 @@
+name: Daily Green
+
+on:
+  schedule:
+    # 매일 KST 08:00 = UTC 23:00 (전날)
+    - cron: "0 23 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write # GITHUB_TOKEN으로 푸시하려면 이거 필수
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 방법 A) 파일에 타임스탬프 한 줄 추가
+      - name: Update heartbeat file
+        run: |
+          mkdir -p .github
+          echo "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> .github/reminder.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/reminder.txt
+          git commit -m "chore: daily heartbeat [skip ci]" || echo "no changes"
+          git push
+
+      # 방법 B) 레포를 더럽히기 싫으면 빈 커밋으로도 가능
+      # - name: Empty commit (alternative)
+      #   run: |
+      #     git config user.name "github-actions[bot]"
+      #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      #     git commit --allow-empty -m "chore: daily heartbeat (empty) [skip ci]"
+      #     git push
