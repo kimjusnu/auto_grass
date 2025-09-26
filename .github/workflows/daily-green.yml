@@ -1,4 +1,4 @@
-name: Daily Green
+name: 🌱 자동 잔디 심기
 
 on:
   schedule:
@@ -20,7 +20,7 @@ jobs:
       - name: Update heartbeat file
         run: |
           mkdir -p .github
-          
+
           # 기존 파일이 있으면 라인 수를 세어서 일수 계산
           if [ -f .github/reminder.txt ]; then
             DAY_COUNT=$(wc -l < .github/reminder.txt)
@@ -28,7 +28,7 @@ jobs:
           else
             DAY_COUNT=1
           fi
-          
+
           echo "$(date -u +'%Y-%m-%dT%H:%M:%SZ') - 🌱 잔디 심기 ${DAY_COUNT}일차" >> .github/reminder.txt
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -41,10 +41,10 @@ jobs:
       #   run: |
       #     git config user.name "github-actions[bot]"
       #     git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      #     
+      #
       #     # 커밋 히스토리에서 일수 계산
       #     COMMIT_COUNT=$(git rev-list --count HEAD)
       #     DAY_COUNT=$((COMMIT_COUNT + 1))
-      #     
+      #
       #     git commit --allow-empty -m "feat: 잔디 심기 ${DAY_COUNT}일차 (빈 커밋) - $(date +'%Y년 %m월 %d일')"
       #     git push
